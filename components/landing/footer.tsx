@@ -117,7 +117,11 @@ export default function Footer() {
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
             {/* Brand — full width on mobile */}
             <div className="col-span-2 lg:col-span-1">
-              <img src="/llogo.png" alt="Macliff LLP" className="h-32 mb-4" />
+              <img
+                src="/logo-bg.png"
+                alt="Macliff LLP"
+                className="h-24 w-auto object-contain mb-4"
+              />
               <p className="text-sm text-white/70 leading-relaxed mb-5">
                 A Certified Public Accounting firm providing Audit, Tax,
                 Advisory and Consulting services in Kenya.

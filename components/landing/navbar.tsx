@@ -6,16 +6,14 @@ import { Theme_Switcher } from "@/components/theme-switcher";
 import { Phone, Mail, CalendarCheck, ChevronDown } from "lucide-react";
 import { FaLinkedinIn, FaXTwitter } from "react-icons/fa6";
 import { motion, AnimatePresence } from "framer-motion";
-import { cubicBezier } from "framer-motion";
 import { services } from "@/lib/services-data";
-
-const ease = cubicBezier(0.34, 1.1, 0.64, 1);
 
 // Brand colors
 // Navy: #163C68  → oklch(0.30 0.09 240)
 // Gold: #BF9353  → oklch(0.72 0.12 60)
 const NAVY = "oklch(0.30 0.09 240)";
 const GOLD = "oklch(0.72 0.12 60)";
+const LIGHT_TEXT = "oklch(0.88 0.04 60)"; // Light color for dark mode
 
 const links = [
   { link: "Home", href: "/" },
@@ -101,16 +99,25 @@ function NavLink({
     >
       <a
         href={href}
-        className="relative py-1 flex items-center gap-1"
+        className={`relative py-1 flex items-center gap-1 ${
+          isActive
+            ? ""
+            : "text-[oklch(0.30_0.09_240)] dark:text-[oklch(0.88_0.04_60)]"
+        }`}
         style={{
-          color: isActive ? GOLD : "oklch(0.88 0.04 60)",
-          fontWeight: isActive ? 600 : 400,
+          color: isActive ? GOLD : undefined,
+          fontWeight: isActive ? 600 : 500,
         }}
       >
         {link}
         {isServices && (
           <ChevronDown
             size={13}
+            className={
+              isActive
+                ? ""
+                : "text-[oklch(0.30_0.09_240)] dark:text-[oklch(0.88_0.04_60)]"
+            }
             style={{
               transition: "transform 0.2s",
               transform: dropOpen ? "rotate(180deg)" : "none",
@@ -140,11 +147,9 @@ function NavLink({
         <AnimatePresence>
           {dropOpen && (
             <motion.div
-              className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 rounded-2xl border shadow-xl overflow-hidden z-50"
+              className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-64 rounded-2xl border shadow-xl overflow-hidden z-50 bg-white dark:bg-gray-800"
               style={{
-                background: `color-mix(in oklch, ${NAVY} 96%, transparent)`,
-                backdropFilter: "blur(20px)",
-                borderColor: "rgba(255,255,255,0.08)",
+                borderColor: "rgba(0,0,0,0.08)",
               }}
               initial={{ opacity: 0, y: -8, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -154,7 +159,7 @@ function NavLink({
               <a
                 href="/services"
                 className="flex items-center gap-2 px-4 py-3 text-xs font-semibold tracking-widest uppercase border-b hover:opacity-80 transition-opacity"
-                style={{ color: GOLD, borderColor: "rgba(255,255,255,0.08)" }}
+                style={{ color: GOLD, borderColor: "rgba(0,0,0,0.08)" }}
               >
                 All Services →
               </a>
@@ -164,8 +169,7 @@ function NavLink({
                   <a
                     key={s.slug}
                     href={`/services/${s.slug}`}
-                    className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-white/5"
-                    style={{ color: "oklch(0.88 0.04 60)" }}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 text-[oklch(0.30_0.09_240)] dark:text-[oklch(0.88_0.04_60)]"
                   >
                     <Icon size={14} className="shrink-0 opacity-60" />
                     {s.title}
@@ -200,13 +204,15 @@ export default function Navbar() {
 
   return (
     <>
-      {/* ── Top info bar ── */}
+      {/* ── Top info bar with blue gradient ── */}
       <motion.div
-        className="w-full overflow-hidden border-b border-border text-muted-foreground"
+        className="w-full overflow-hidden border-b text-white/90"
         style={{
           maxHeight: scrolled ? "0px" : "48px",
           opacity: scrolled ? 0 : 1,
           transition: "max-height 0.5s ease, opacity 0.5s ease",
+          background: `linear-gradient(135deg, ${NAVY} 0%, color-mix(in oklch, ${NAVY} 80%, ${GOLD}) 100%)`,
+          borderColor: "rgba(255,255,255,0.1)",
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -218,10 +224,10 @@ export default function Navbar() {
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-12 flex items-center justify-between relative">
           {/* Left: phone + email (desktop) | phone (mobile) */}
-          <div className="flex items-center gap-3 sm:gap-5 text-xs sm:text-sm text-foreground/70">
+          <div className="flex items-center gap-3 sm:gap-5 text-xs sm:text-sm">
             <a
               href="tel:+254734175129"
-              className="flex items-center gap-1.5 hover:text-foreground transition-colors"
+              className="flex items-center gap-1.5 hover:text-white transition-colors"
             >
               <Phone size={12} />
               <span className="hidden sm:inline">+254 734 175 129</span>
@@ -229,7 +235,7 @@ export default function Navbar() {
             </a>
             <a
               href="mailto:info@macliffllp.co.ke"
-              className="hidden lg:flex items-center gap-1.5 hover:text-foreground transition-colors"
+              className="hidden lg:flex items-center gap-1.5 hover:text-white transition-colors"
             >
               <Mail size={12} />
               info@macliffllp.co.ke
@@ -237,18 +243,18 @@ export default function Navbar() {
           </div>
 
           {/* Mobile: centered | Desktop: right */}
-          <div className="absolute left-1/2 -translate-x-1/2 sm:static sm:translate-x-0 sm:ml-auto flex items-center gap-3 text-foreground/60">
+          <div className="absolute left-1/2 -translate-x-1/2 sm:static sm:translate-x-0 sm:ml-auto flex items-center gap-3 text-white/80">
             <a
               href="#"
               aria-label="LinkedIn"
-              className="hover:text-[#0A66C2] transition-colors"
+              className="hover:text-white transition-colors"
             >
               <FaLinkedinIn size={15} />
             </a>
             <a
               href="#"
               aria-label="X (Twitter)"
-              className="hover:text-foreground transition-colors"
+              className="hover:text-white transition-colors"
             >
               <FaXTwitter size={14} />
             </a>
@@ -263,14 +269,11 @@ export default function Navbar() {
         </div>
       </motion.div>
 
-      {/* ── Main navbar ── */}
+      {/* ── Main navbar with white background ── */}
       <motion.div
-        className={`w-full z-50 transition-all duration-300 backdrop-blur-md ${scrolled ? "fixed top-0 shadow-lg" : "relative"}`}
+        className={`w-full z-50 transition-all duration-300 bg-white dark:bg-gray-900 ${scrolled ? "fixed top-0 shadow-lg" : "relative"}`}
         style={{
-          background: scrolled
-            ? `color-mix(in oklch, ${NAVY} 92%, transparent)`
-            : `linear-gradient(135deg, ${NAVY} 0%, color-mix(in oklch, ${NAVY} 80%, ${GOLD}) 100%)`,
-          borderBottom: `1px solid color-mix(in oklch, ${GOLD} 30%, transparent)`,
+          borderBottom: `1px solid ${scrolled ? "rgba(0,0,0,0.08)" : "rgba(0,0,0,0.06)"}`,
         }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -280,20 +283,20 @@ export default function Navbar() {
           delay: 0.1,
         }}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-[72px] flex items-center justify-between">
-          {/* Logo */}
-          <a href="/" className="flex items-center gap-2.5 shrink-0">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 sm:h-24 flex items-center justify-between">
+          {/* Logo - taller to accommodate new logo */}
+          <a href="/" className="flex items-center gap-2.5 shrink-0 py-2">
             <img
-              src="/logo.png"
+              src="/logo-bg.png"
               alt="Macliff LLP"
-              className="h-9 w-auto"
+              className="h-16 sm:h-20 w-auto object-contain"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = "/logo.svg";
+                (e.target as HTMLImageElement).src = "/logo.png";
               }}
             />
           </a>
 
-          {/* Desktop nav links */}
+          {/* Desktop nav links - darker text for white bg, lighter for dark mode */}
           <nav className="hidden md:flex items-center gap-7 text-[15px]">
             {links.map(({ link, href }) => {
               const isActive = pathname === href;
@@ -325,8 +328,7 @@ export default function Navbar() {
               <Theme_Switcher />
             </span>
             <button
-              className="md:hidden p-1.5 rounded-md transition-colors"
-              style={{ color: "oklch(0.88 0.04 60)" }}
+              className="md:hidden p-1.5 rounded-md transition-colors text-[oklch(0.30_0.09_240)] dark:text-[oklch(0.88_0.04_60)]"
               onClick={() => setMenuOpen((v) => !v)}
               aria-label="Toggle menu"
             >
@@ -343,7 +345,7 @@ export default function Navbar() {
           opacity: menuOpen ? 1 : 0,
           pointerEvents: menuOpen ? "auto" : "none",
           backdropFilter: menuOpen ? "blur(8px)" : "blur(0px)",
-          background: `color-mix(in oklch, ${NAVY} 50%, transparent)`,
+          background: "rgba(0,0,0,0.3)",
         }}
         onClick={() => setMenuOpen(false)}
       />
@@ -352,18 +354,16 @@ export default function Navbar() {
       <div
         className="md:hidden fixed left-0 right-0 z-50 transition-[transform,opacity] duration-300 ease-out"
         style={{
-          top: scrolled ? "72px" : "120px",
+          top: scrolled ? "80px" : "128px",
           transform: menuOpen ? "translateY(0)" : "translateY(-12px)",
           opacity: menuOpen ? 1 : 0,
           pointerEvents: menuOpen ? "auto" : "none",
         }}
       >
         <div
-          className="mx-3 rounded-2xl shadow-2xl overflow-hidden"
+          className="mx-3 rounded-2xl shadow-2xl overflow-hidden bg-white dark:bg-gray-900"
           style={{
-            background: `color-mix(in oklch, ${NAVY} 95%, transparent)`,
-            backdropFilter: "blur(24px)",
-            border: `1px solid color-mix(in oklch, ${GOLD} 25%, transparent)`,
+            border: `1px solid rgba(0,0,0,0.08)`,
           }}
         >
           <nav className="flex flex-col p-3 gap-1 text-[15px]">
@@ -374,10 +374,14 @@ export default function Navbar() {
                   key={link}
                   href={href}
                   onClick={() => setMenuOpen(false)}
-                  className="py-3 px-4 rounded-xl transition-colors flex items-center justify-between"
+                  className={`py-3 px-4 rounded-xl transition-colors flex items-center justify-between ${
+                    isActive
+                      ? ""
+                      : "text-[oklch(0.30_0.09_240)] dark:text-[oklch(0.88_0.04_60)]"
+                  }`}
                   style={{
-                    color: isActive ? GOLD : "oklch(0.88 0.04 60)",
-                    fontWeight: isActive ? 600 : 400,
+                    color: isActive ? GOLD : undefined,
+                    fontWeight: isActive ? 600 : 500,
                     background: isActive
                       ? `color-mix(in oklch, ${GOLD} 10%, transparent)`
                       : "transparent",
