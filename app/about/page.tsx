@@ -12,7 +12,7 @@ import { AboutBanner } from "@/components/landing/about/banner";
 export const metadata: Metadata = buildMetadata({
   title: "About Us",
   description:
-    "Learn about MaCliff LLP — Kenya's trusted Certified Public Accounting firm with over 30 years of combined partner experience in Audit, Tax, Advisory, and Consulting.",
+    "Learn about Macliff LLP — Kenya's trusted Certified Public Accounting firm with over 30 years of combined partner experience in Audit, Tax, Advisory, and Consulting.",
   path: "/about",
   image: "https://macliffllp.co.ke/imgs/bg.webp",
   keywords: [
@@ -55,7 +55,7 @@ export default function AboutPage() {
               </FadeIn>
               <FadeIn delay={0.15}>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  MaCliff LLP is a certified public accounting firm and a
+                  Macliff LLP is a certified public accounting firm and a
                   leading provider of Audit and Assurance, Tax, Advisory and
                   Consulting services in Kenya. Although the company started
                   operations as an LLP in 2023, the three partners have over 30
