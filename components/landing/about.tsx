@@ -36,7 +36,7 @@ export default function About() {
 
             <FadeIn delay={0.15}>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-4">
-                MaCliff LLP is a certified public accounting firm and a leading
+                Macliff LLP is a certified public accounting firm and a leading
                 provider of Audit and Assurance, Tax, Advisory and Consulting
                 services in Kenya.
               </p>
